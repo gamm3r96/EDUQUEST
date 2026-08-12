@@ -3,912 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - EduQuest Games</title>
-    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@3/dist/iconify.min.js"></script>
+    <title>Admin Dashboard - EduQuest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/3/3.1.0/iconify.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --accent: #f59e0b;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--light);
-        }
-
-        .admin-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .admin-logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .admin-nav {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .admin-nav button {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            transition: background 0.3s;
-        }
-
-        .admin-nav button:hover,
-        .admin-nav button.active {
-            background: rgba(255,255,255,0.3);
-        }
-
-        .logout-btn {
-            background: rgba(239, 68, 68, 0.3) !important;
-        }
-
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.5) !important;
-        }
-
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .section {
-            display: none;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        .section-title {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-        }
-
-        .stat-icon.primary { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
-        .stat-icon.success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
-        .stat-icon.warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
-        .stat-icon.accent { background: rgba(139, 92, 246, 0.1); color: var(--secondary); }
-
-        .stat-info h3 {
-            font-size: 2rem;
-            color: var(--dark);
-        }
-
-        .stat-info p {
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .data-table {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        .table-header {
-            padding: 1.5rem;
-            border-bottom: 2px solid var(--light);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .add-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            font-weight: 500;
-            transition: background 0.3s;
-        }
-
-        .add-btn:hover {
-            background: var(--primary-dark);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th, td {
-            padding: 1rem 1.5rem;
-            text-align: left;
-        }
-
-        th {
-            background: var(--light);
-            font-weight: 600;
-            color: var(--dark);
-        }
-
-        tr:not(:last-child) {
-            border-bottom: 1px solid var(--light);
-        }
-
-        tr:hover {
-            background: rgba(99, 102, 241, 0.05);
-        }
-
-        .role-badge {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .role-admin { background: rgba(139, 92, 246, 0.1); color: var(--secondary); }
-        .role-teacher { background: rgba(16, 185, 129, 0.1); color: var(--success); }
-        .role-student { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
-
-        .status-badge {
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
-
-        .status-active { background: rgba(16, 185, 129, 0.1); color: var(--success); }
-        .status-inactive { background: rgba(100, 116, 139, 0.1); color: #64748b; }
-        .status-suspended { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
-
-        .action-btns {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .action-btn {
-            padding: 0.4rem 0.8rem;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .edit-btn {
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
-        }
-
-        .edit-btn:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .delete-btn {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-        }
-
-        .delete-btn:hover {
-            background: var(--danger);
-            color: white;
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .modal-title {
-            font-size: 1.3rem;
-            color: var(--dark);
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #64748b;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.7rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .save-btn {
-            flex: 1;
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        .cancel-btn {
-            flex: 1;
-            background: #e2e8f0;
-            color: var(--dark);
-            border: none;
-            padding: 0.8rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-            .admin-header {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .admin-nav {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            table {
-                font-size: 0.85rem;
-            }
-
-            th, td {
-                padding: 0.7rem;
-            }
-        }
+        body { font-family: 'Poppins', sans-serif; }
+        .sidebar-item { @apply flex items-center space-x-3 px-4 py-3 rounded-lg cursor-pointer transition; }
+        .sidebar-item.active { @apply bg-indigo-600 text-white; }
+        .sidebar-item:hover:not(.active) { @apply bg-indigo-50 text-indigo-600; }
+        .card { @apply bg-white rounded-xl shadow-md p-6; }
+        .btn-primary { @apply bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:shadow-lg transition; }
+        .btn-danger { @apply bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition; }
+        .btn-secondary { @apply bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition; }
+        .input-field { @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-500 outline-none; }
+        .loader { border-top-color: #667eea; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
-<body>
-    <header class="admin-header">
-        <div class="admin-logo">
-            <span class="iconify" data-icon="icon-park-solid:game-console"></span>
-            EduQuest Admin
+<body class="bg-gray-100 min-h-screen">
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="fixed inset-0 bg-gradient-to-br from-indigo-600 to-purple-700 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8">
+            <div class="text-center mb-8">
+                <span class="iconify text-6xl text-indigo-600 mb-4 inline-block" data-icon="icon-park-solid:game-console"></span>
+                <h1 class="text-2xl font-bold text-gray-800">Admin Access</h1>
+                <p class="text-gray-500 mt-2">Sign in to manage EduQuest</p>
+            </div>
+            
+            <div id="login-error" class="hidden mb-4 bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                <div class="flex items-center space-x-2">
+                    <span class="iconify text-red-500" data-icon="icon-park-solid:error"></span>
+                    <p class="text-red-700 text-sm">Invalid credentials</p>
+                </div>
+            </div>
+
+            <form id="admin-login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3 text-gray-400"><span class="iconify" data-icon="icon-park-solid:mail"></span></span>
+                        <input type="email" id="login-email" required class="input-field pl-10" placeholder="admin@eduquest.com">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-3 text-gray-400"><span class="iconify" data-icon="icon-park-solid:lock"></span></span>
+                        <input type="password" id="login-password" required class="input-field pl-10" placeholder="••••••••">
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary w-full">Sign In</button>
+            </form>
+            <div class="mt-6 text-center">
+                <a href="index.html" class="text-sm text-gray-500 hover:text-gray-700 flex items-center justify-center space-x-1">
+                    <span class="iconify" data-icon="icon-park-solid:left"></span>
+                    <span>Back to Home</span>
+                </a>
+            </div>
         </div>
-        <nav class="admin-nav">
-            <button onclick="showSection('dashboard')" class="active" id="nav-dashboard">
-                <span class="iconify" data-icon="icon-park-solid:chart-line"></span> Dashboard
-            </button>
-            <button onclick="showSection('games')" id="nav-games">
-                <span class="iconify" data-icon="icon-park-solid:game-handle"></span> Games
-            </button>
-            <button onclick="showSection('users')" id="nav-users">
-                <span class="iconify" data-icon="icon-park-solid:user"></span> Users
-            </button>
-            <button onclick="showSection('downloads')" id="nav-downloads">
-                <span class="iconify" data-icon="icon-park-solid:download-one"></span> Downloads
-            </button>
-            <button onclick="logout()" class="logout-btn">
-                <span class="iconify" data-icon="icon-park-solid:logout"></span> Logout
-            </button>
-        </nav>
-    </header>
-
-    <div class="admin-container">
-        <section id="dashboard" class="section active">
-            <h2 class="section-title">
-                <span class="iconify" data-icon="icon-park-solid:chart-line"></span> Dashboard Overview
-            </h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon primary">
-                        <span class="iconify" data-icon="icon-park-solid:game-handle"></span>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="totalGames">4</h3>
-                        <p>Total Games</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon success">
-                        <span class="iconify" data-icon="icon-park-solid:user"></span>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="totalUsers">0</h3>
-                        <p>Total Users</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon warning">
-                        <span class="iconify" data-icon="icon-park-solid:download-one"></span>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="totalDownloads">0</h3>
-                        <p>Total Downloads</p>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon accent">
-                        <span class="iconify" data-icon="icon-park-solid:star"></span>
-                    </div>
-                    <div class="stat-info">
-                        <h3 id="avgRating">4.8</h3>
-                        <p>Average Rating</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="games" class="section">
-            <h2 class="section-title">
-                <span class="iconify" data-icon="icon-park-solid:game-handle"></span> Manage Games
-            </h2>
-            <div class="data-table">
-                <div class="table-header">
-                    <h3>All Games</h3>
-                    <button class="add-btn" onclick="openGameModal()">
-                        <span class="iconify" data-icon="icon-park-solid:plus"></span> Add Game
-                    </button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Subject</th>
-                            <th>Grade Level</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="gamesTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="users" class="section">
-            <h2 class="section-title">
-                <span class="iconify" data-icon="icon-park-solid:user"></span> Manage Users
-            </h2>
-            <div class="data-table">
-                <div class="table-header">
-                    <h3>All Users</h3>
-                    <button class="add-btn" onclick="openUserModal()">
-                        <span class="iconify" data-icon="icon-park-solid:plus"></span> Add User
-                    </button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Created</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </section>
-
-        <section id="downloads" class="section">
-            <h2 class="section-title">
-                <span class="iconify" data-icon="icon-park-solid:download-one"></span> Download History
-            </h2>
-            <div class="data-table">
-                <div class="table-header">
-                    <h3>All Downloads</h3>
-                    <button class="add-btn" onclick="exportDownloads()">
-                        <span class="iconify" data-icon="icon-park-solid:export"></span> Export CSV
-                    </button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Email</th>
-                            <th>Grade</th>
-                            <th>Date</th>
-                            <th>Game</th>
-                        </tr>
-                    </thead>
-                    <tbody id="downloadsTableBody">
-                    </tbody>
-                </table>
-            </div>
-        </section>
     </div>
 
-    <div class="modal-overlay" id="gameModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title" id="gameModalTitle">Add New Game</h3>
-                <button class="close-modal" onclick="closeGameModal()">&times;</button>
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden min-h-screen flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg fixed h-full">
+            <div class="p-6 border-b">
+                <div class="flex items-center space-x-3">
+                    <span class="iconify text-3xl text-indigo-600" data-icon="icon-park-solid:game-console"></span>
+                    <span class="font-bold text-xl">EduQuest Admin</span>
+                </div>
             </div>
-            <form id="gameForm">
-                <input type="hidden" id="gameId">
-                <div class="form-group">
-                    <label>Game Name</label>
-                    <input type="text" id="gameName" required placeholder="Enter game name">
+            <nav class="p-4 space-y-2">
+                <div onclick="showTab('overview')" id="nav-overview" class="sidebar-item active">
+                    <span class="iconify text-xl" data-icon="icon-park-solid:chart-line"></span>
+                    <span>Overview</span>
                 </div>
-                <div class="form-group">
-                    <label>Subject</label>
-                    <select id="gameSubject" required>
-                        <option value="">Select subject</option>
-                        <option value="Chemistry">Chemistry</option>
-                        <option value="Coding">Coding</option>
-                        <option value="Engineering">Engineering</option>
-                        <option value="Math">Math</option>
-                        <option value="Physics">Physics</option>
-                        <option value="Biology">Biology</option>
+                <div onclick="showTab('games')" id="nav-games" class="sidebar-item">
+                    <span class="iconify text-xl" data-icon="icon-park-solid:game-console"></span>
+                    <span>Manage Games</span>
+                </div>
+                <div onclick="showTab('users')" id="nav-users" class="sidebar-item">
+                    <span class="iconify text-xl" data-icon="icon-park-solid:user-group"></span>
+                    <span>Manage Users</span>
+                </div>
+                <div onclick="showTab('downloads')" id="nav-downloads" class="sidebar-item">
+                    <span class="iconify text-xl" data-icon="icon-park-solid:download"></span>
+                    <span>Downloads</span>
+                </div>
+            </nav>
+            <div class="absolute bottom-0 w-full p-4 border-t">
+                <button onclick="logout()" class="sidebar-item text-red-600 hover:bg-red-50">
+                    <span class="iconify text-xl" data-icon="icon-park-solid:logout"></span>
+                    <span>Sign Out</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-64 flex-1 p-8">
+            <!-- Overview Tab -->
+            <div id="tab-overview" class="tab-content">
+                <h1 class="text-3xl font-bold mb-6">Dashboard Overview</h1>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="card border-l-4 border-indigo-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Games</p>
+                                <p id="stat-games" class="text-3xl font-bold">4</p>
+                            </div>
+                            <span class="iconify text-4xl text-indigo-500" data-icon="icon-park-solid:game-console"></span>
+                        </div>
+                    </div>
+                    <div class="card border-l-4 border-green-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Total Users</p>
+                                <p id="stat-users" class="text-3xl font-bold">0</p>
+                            </div>
+                            <span class="iconify text-4xl text-green-500" data-icon="icon-park-solid:user"></span>
+                        </div>
+                    </div>
+                    <div class="card border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Downloads</p>
+                                <p id="stat-downloads" class="text-3xl font-bold">0</p>
+                            </div>
+                            <span class="iconify text-4xl text-purple-500" data-icon="icon-park-solid:download"></span>
+                        </div>
+                    </div>
+                    <div class="card border-l-4 border-yellow-500">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-gray-500 text-sm">Avg Rating</p>
+                                <p class="text-3xl font-bold">4.8</p>
+                            </div>
+                            <span class="iconify text-4xl text-yellow-500" data-icon="icon-park-solid:star"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games Tab -->
+            <div id="tab-games" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold">Manage Games</h1>
+                    <button onclick="openGameModal()" class="btn-primary flex items-center space-x-2">
+                        <span class="iconify" data-icon="icon-park-solid:plus"></span>
+                        <span>Add Game</span>
+                    </button>
+                </div>
+                <div id="games-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="tab-users" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold">Manage Users</h1>
+                    <button onclick="openUserModal()" class="btn-primary flex items-center space-x-2">
+                        <span class="iconify" data-icon="icon-park-solid:plus"></span>
+                        <span>Add User</span>
+                    </button>
+                </div>
+                <div class="card overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Downloads Tab -->
+            <div id="tab-downloads" class="tab-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h1 class="text-3xl font-bold">Download Records</h1>
+                    <button onclick="exportDownloads()" class="btn-secondary flex items-center space-x-2">
+                        <span class="iconify" data-icon="icon-park-solid:export"></span>
+                        <span>Export CSV</span>
+                    </button>
+                </div>
+                <div class="card overflow-hidden">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Student</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Grade</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="downloads-table" class="divide-y divide-gray-200"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Game Modal -->
+    <div id="game-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="game-modal-title" class="text-2xl font-bold">Add Game</h2>
+                <button onclick="closeGameModal()" class="text-gray-400 hover:text-gray-600">
+                    <span class="iconify text-2xl" data-icon="icon-park-solid:close"></span>
+                </button>
+            </div>
+            <form id="game-form" class="space-y-4">
+                <input type="hidden" id="game-id">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Game Title</label>
+                    <input type="text" id="game-title" required class="input-field" placeholder="e.g., Chemistry Quest">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
+                    <select id="game-subject" class="input-field">
+                        <option>Science</option><option>Technology</option><option>Engineering</option><option>Math</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Grade Level</label>
-                    <select id="gameGrade" required>
-                        <option value="">Select grade</option>
-                        <option value="6-8">Grades 6-8</option>
-                        <option value="6-7">Grades 6-7</option>
-                        <option value="7-8">Grades 7-8</option>
-                        <option value="6">Grade 6</option>
-                        <option value="7">Grade 7</option>
-                        <option value="8">Grade 8</option>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Icon</label>
+                    <select id="game-icon" class="input-field">
+                        <option value="flask">Flask</option><option value="code">Code</option><option value="building-construction">Building</option><option value="calculator">Calculator</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="gameDescription" rows="3" required placeholder="Enter game description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="gameStatus" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Color</label>
+                    <select id="game-color" class="input-field">
+                        <option value="bg-blue-500">Blue</option><option value="bg-green-500">Green</option><option value="bg-orange-500">Orange</option><option value="bg-purple-500">Purple</option>
                     </select>
                 </div>
-                <div class="modal-actions">
-                    <button type="button" class="cancel-btn" onclick="closeGameModal()">Cancel</button>
-                    <button type="submit" class="save-btn">Save Game</button>
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" onclick="closeGameModal()" class="btn-secondary flex-1">Cancel</button>
+                    <button type="submit" class="btn-primary flex-1">Save Game</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class="modal-overlay" id="userModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h3 class="modal-title" id="userModalTitle">Add New User</h3>
-                <button class="close-modal" onclick="closeUserModal()">&times;</button>
+    <!-- User Modal -->
+    <div id="user-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-lg w-full p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="user-modal-title" class="text-2xl font-bold">Add User</h2>
+                <button onclick="closeUserModal()" class="text-gray-400 hover:text-gray-600">
+                    <span class="iconify text-2xl" data-icon="icon-park-solid:close"></span>
+                </button>
             </div>
-            <form id="userForm">
-                <input type="hidden" id="userId">
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="userEmail" required placeholder="user@example.com">
+            <form id="user-form" class="space-y-4">
+                <input type="hidden" id="user-id">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="user-email" required class="input-field" placeholder="user@example.com">
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="userPassword" placeholder="Leave blank to keep current">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="user-password" class="input-field" placeholder="Leave blank to keep current">
                 </div>
-                <div class="form-group">
-                    <label>Role</label>
-                    <select id="userRole" required>
-                        <option value="student">Student</option>
-                        <option value="teacher">Teacher</option>
-                        <option value="admin">Admin</option>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                    <select id="user-role" class="input-field">
+                        <option value="Student">Student</option>
+                        <option value="Teacher">Teacher</option>
+                        <option value="Admin">Admin</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Status</label>
-                    <select id="userStatus" required>
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="suspended">Suspended</option>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                    <select id="user-status" class="input-field">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Suspended">Suspended</option>
                     </select>
                 </div>
-                <div class="modal-actions">
-                    <button type="button" class="cancel-btn" onclick="closeUserModal()">Cancel</button>
-                    <button type="submit" class="save-btn">Save User</button>
+                <div class="flex space-x-3 pt-4">
+                    <button type="button" onclick="closeUserModal()" class="btn-secondary flex-1">Cancel</button>
+                    <button type="submit" class="btn-primary flex-1">Save User</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script type="module">
-        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+    <!-- Loading Overlay -->
+    <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 flex items-center space-x-4">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-10 w-10"></div>
+            <span class="text-gray-700 font-medium">Processing...</span>
+        </div>
+    </div>
 
-        const supabaseUrl = 'YOUR_SUPABASE_URL';
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
-        
-        let supabase;
-        if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
-            supabase = createClient(supabaseUrl, supabaseKey);
-        }
-
+    <script src="supabase-config.js"></script>
+    <script>
+        // State (in-memory only, no localStorage)
         let games = [
-            { id: 1, name: 'Chemistry Quest', subject: 'Chemistry', grade: '6-8', status: 'active' },
-            { id: 2, name: 'Code Academy', subject: 'Coding', grade: '6-8', status: 'active' },
-            { id: 3, name: 'Engineering Builder', subject: 'Engineering', grade: '7-8', status: 'active' },
-            { id: 4, name: 'Math Adventures', subject: 'Math', grade: '6-8', status: 'active' }
+            { id: 1, title: 'Chemistry Quest', subject: 'Science', icon: 'flask', color: 'bg-blue-500' },
+            { id: 2, title: 'Code Crusaders', subject: 'Technology', icon: 'code', color: 'bg-green-500' },
+            { id: 3, title: 'Engineering Empire', subject: 'Engineering', icon: 'building-construction', color: 'bg-orange-500' },
+            { id: 4, title: 'Math Marathon', subject: 'Math', icon: 'calculator', color: 'bg-purple-500' }
         ];
 
         let users = [];
         let downloads = [];
+        let currentUser = null;
 
-        window.showSection = function(sectionId) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            document.getElementById('nav-' + sectionId).classList.add('active');
-            
-            if (sectionId === 'games') renderGames();
-            if (sectionId === 'users') renderUsers();
-            if (sectionId === 'downloads') renderDownloads();
-            if (sectionId === 'dashboard') updateStats();
-        };
-
-        window.logout = function() {
-            if (supabase) {
-                supabase.auth.signOut();
+        // Auth Check
+        function checkAuth() {
+            const user = sessionStorage.getItem('eq_admin');
+            if (!user) {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('dashboard').classList.add('hidden');
+            } else {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                currentUser = JSON.parse(user);
+                initDashboard();
             }
-            window.location.href = 'login.html';
-        };
-
-        function renderGames() {
-            const tbody = document.getElementById('gamesTableBody');
-            tbody.innerHTML = games.map(game => `
-                <tr>
-                    <td><strong>${escapeHtml(game.name)}</strong></td>
-                    <td>${escapeHtml(game.subject)}</td>
-                    <td>${escapeHtml(game.grade)}</td>
-                    <td><span class="status-badge status-${game.status}">${game.status}</span></td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="action-btn edit-btn" onclick="editGame(${game.id})">
-                                <span class="iconify" data-icon="icon-park-solid:edit"></span> Edit
-                            </button>
-                            <button class="action-btn delete-btn" onclick="deleteGame(${game.id})">
-                                <span class="iconify" data-icon="icon-park-solid:delete"></span> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
         }
 
-        function renderUsers() {
-            const tbody = document.getElementById('usersTableBody');
-            if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;">No users found. Add your first user!</td></tr>';
-                return;
+        // Login
+        document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Demo: accept admin@eduquest.com / admin123 OR any email with 'admin'
+            if (password.length >= 6 && (email.includes('admin') || email === 'admin@eduquest.com')) {
+                sessionStorage.setItem('eq_admin', JSON.stringify({ email, role: 'Admin' }));
+                checkAuth();
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
             }
-            tbody.innerHTML = users.map(user => `
-                <tr>
-                    <td>${escapeHtml(user.email)}</td>
-                    <td><span class="role-badge role-${user.role}">${user.role}</span></td>
-                    <td><span class="status-badge status-${user.status}">${user.status}</span></td>
-                    <td>${user.created || 'Recently'}</td>
-                    <td>
-                        <div class="action-btns">
-                            <button class="action-btn edit-btn" onclick="editUser('${escapeHtml(user.email)}')">
-                                <span class="iconify" data-icon="icon-park-solid:edit"></span> Edit
-                            </button>
-                            <button class="action-btn delete-btn" onclick="deleteUser('${escapeHtml(user.email)}')">
-                                <span class="iconify" data-icon="icon-park-solid:delete"></span> Delete
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+        });
+
+        function logout() {
+            sessionStorage.removeItem('eq_admin');
+            window.location.reload();
         }
 
-        function renderDownloads() {
-            const tbody = document.getElementById('downloadsTableBody');
-            if (downloads.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;">No downloads yet</td></tr>';
-                return;
-            }
-            tbody.innerHTML = downloads.map(dl => `
-                <tr>
-                    <td>${escapeHtml(dl.studentName)}</td>
-                    <td>${escapeHtml(dl.email)}</td>
-                    <td>Grade ${escapeHtml(dl.grade)}</td>
-                    <td>${dl.date}</td>
-                    <td>${escapeHtml(dl.game || 'Demo Pack')}</td>
-                </tr>
-            `).join('');
+        // Dashboard Init
+        function initDashboard() {
+            updateStats();
+            renderGames();
+            renderUsers();
+            renderDownloads();
         }
 
         function updateStats() {
-            document.getElementById('totalGames').textContent = games.length;
-            document.getElementById('totalUsers').textContent = users.length;
-            document.getElementById('totalDownloads').textContent = downloads.length;
+            document.getElementById('stat-games').textContent = games.length;
+            document.getElementById('stat-users').textContent = users.length;
+            document.getElementById('stat-downloads').textContent = downloads.length;
         }
 
-        window.openGameModal = function() {
-            document.getElementById('gameForm').reset();
-            document.getElementById('gameId').value = '';
-            document.getElementById('gameModalTitle').textContent = 'Add New Game';
-            document.getElementById('gameModal').classList.add('active');
-        };
+        // Tab Navigation
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            document.getElementById(`nav-${tabName}`).classList.add('active');
+        }
 
-        window.closeGameModal = function() {
-            document.getElementById('gameModal').classList.remove('active');
-        };
+        // Games Management
+        function renderGames() {
+            const container = document.getElementById('games-list');
+            container.innerHTML = games.map(g => `
+                <div class="card ${g.color} text-white relative group">
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition flex space-x-2">
+                        <button onclick="editGame(${g.id})" class="bg-white text-gray-800 p-2 rounded-lg hover:bg-gray-100">
+                            <span class="iconify" data-icon="icon-park-solid:edit"></span>
+                        </button>
+                        <button onclick="deleteGame(${g.id})" class="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600">
+                            <span class="iconify" data-icon="icon-park-solid:delete"></span>
+                        </button>
+                    </div>
+                    <span class="iconify text-6xl opacity-50 mb-4" data-icon="icon-park-solid:${g.icon}"></span>
+                    <h3 class="text-xl font-bold">${g.title}</h3>
+                    <p class="opacity-80">${g.subject}</p>
+                </div>
+            `).join('');
+        }
 
-        window.editGame = function(id) {
-            const game = games.find(g => g.id === id);
-            if (!game) return;
-            document.getElementById('gameId').value = game.id;
-            document.getElementById('gameName').value = game.name;
-            document.getElementById('gameSubject').value = game.subject;
-            document.getElementById('gameGrade').value = game.grade;
-            document.getElementById('gameDescription').value = game.description || '';
-            document.getElementById('gameStatus').value = game.status;
-            document.getElementById('gameModalTitle').textContent = 'Edit Game';
-            document.getElementById('gameModal').classList.add('active');
-        };
-
-        window.deleteGame = function(id) {
-            if (confirm('Are you sure you want to delete this game?')) {
-                games = games.filter(g => g.id !== id);
-                renderGames();
-                updateStats();
+        function openGameModal(gameId = null) {
+            const modal = document.getElementById('game-modal');
+            const form = document.getElementById('game-form');
+            form.reset();
+            
+            if (gameId) {
+                const game = games.find(g => g.id === gameId);
+                document.getElementById('game-modal-title').textContent = 'Edit Game';
+                document.getElementById('game-id').value = game.id;
+                document.getElementById('game-title').value = game.title;
+                document.getElementById('game-subject').value = game.subject;
+                document.getElementById('game-icon').value = game.icon;
+                document.getElementById('game-color').value = game.color;
+            } else {
+                document.getElementById('game-modal-title').textContent = 'Add Game';
+                document.getElementById('game-id').value = '';
             }
-        };
+            modal.classList.remove('hidden');
+        }
 
-        document.getElementById('gameForm').addEventListener('submit', function(e) {
+        function closeGameModal() {
+            document.getElementById('game-modal').classList.add('hidden');
+        }
+
+        document.getElementById('game-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const id = document.getElementById('gameId').value;
+            const id = document.getElementById('game-id').value;
             const gameData = {
-                name: document.getElementById('gameName').value,
-                subject: document.getElementById('gameSubject').value,
-                grade: document.getElementById('gameGrade').value,
-                description: document.getElementById('gameDescription').value,
-                status: document.getElementById('gameStatus').value
+                title: document.getElementById('game-title').value,
+                subject: document.getElementById('game-subject').value,
+                icon: document.getElementById('game-icon').value,
+                color: document.getElementById('game-color').value
             };
 
             if (id) {
                 const index = games.findIndex(g => g.id == id);
-                if (index !== -1) {
-                    games[index] = { ...games[index], ...gameData };
-                }
+                games[index] = { ...games[index], ...gameData };
             } else {
-                games.push({
-                    id: Date.now(),
-                    ...gameData
-                });
+                games.push({ id: Date.now(), ...gameData });
             }
-
+            
             closeGameModal();
             renderGames();
             updateStats();
         });
 
-        window.openUserModal = function() {
-            document.getElementById('userForm').reset();
-            document.getElementById('userId').value = '';
-            document.getElementById('userModalTitle').textContent = 'Add New User';
-            document.getElementById('userModal').classList.add('active');
-        };
-
-        window.closeUserModal = function() {
-            document.getElementById('userModal').classList.remove('active');
-        };
-
-        window.editUser = function(email) {
-            const user = users.find(u => u.email === email);
-            if (!user) return;
-            document.getElementById('userId').value = user.email;
-            document.getElementById('userEmail').value = user.email;
-            document.getElementById('userPassword').value = '';
-            document.getElementById('userRole').value = user.role;
-            document.getElementById('userStatus').value = user.status;
-            document.getElementById('userModalTitle').textContent = 'Edit User';
-            document.getElementById('userModal').classList.add('active');
-        };
-
-        window.deleteUser = async function(email) {
-            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-                if (supabase) {
-                    const { error } = await supabase.auth.admin.deleteUser(email);
-                    if (error) {
-                        alert('Error deleting user: ' + error.message);
-                        return;
-                    }
-                }
-                users = users.filter(u => u.email !== email);
-                renderUsers();
+        function editGame(id) { openGameModal(id); }
+        
+        function deleteGame(id) {
+            if(confirm('Delete this game?')) {
+                games = games.filter(g => g.id !== id);
+                renderGames();
                 updateStats();
             }
-        };
+        }
 
-        document.getElementById('userForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const email = document.getElementById('userEmail').value;
-            const password = document.getElementById('userPassword').value;
-            const role = document.getElementById('userRole').value;
-            const status = document.getElementById('userStatus').value;
-            const existingId = document.getElementById('userId').value;
-
-            if (existingId) {
-                const index = users.findIndex(u => u.email === existingId);
-                if (index !== -1) {
-                    users[index] = { ...users[index], role, status };
-                }
-            } else {
-                if (supabase && password) {
-                    const { data, error } = await supabase.auth.admin.createUser({
-                        email,
-                        password,
-                        user_metadata: { role }
-                    });
-                    if (error) {
-                        alert('Error creating user: ' + error.message);
-                        return;
-                    }
-                }
-                users.push({
-                    email,
-                    role,
-                    status,
-                    created: new Date().toLocaleDateString()
-                });
+        // Users Management
+        function renderUsers() {
+            const tbody = document.getElementById('users-table');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No users yet. Add your first user!</td></tr>';
+                return;
             }
+            tbody.innerHTML = users.map(u => {
+                const roleColors = { Admin: 'bg-purple-100 text-purple-800', Teacher: 'bg-green-100 text-green-800', Student: 'bg-orange-100 text-orange-800' };
+                const statusColors = { Active: 'bg-green-100 text-green-800', Inactive: 'bg-gray-100 text-gray-800', Suspended: 'bg-red-100 text-red-800' };
+                return `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-700 font-bold">${u.email.charAt(0).toUpperCase()}</div>
+                            <span class="font-medium">${u.email}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${roleColors[u.role]}">${u.role}</span></td>
+                    <td class="px-6 py-4"><span class="px-3 py-1 rounded-full text-xs font-bold ${statusColors[u.status]}">${u.status}</span></td>
+                    <td class="px-6 py-4 text-right space-x-2">
+                        <button onclick="editUser(${u.id})" class="text-indigo-600 hover:text-indigo-800"><span class="iconify" data-icon="icon-park-solid:edit"></span></button>
+                        <button onclick="deleteUser(${u.id})" class="text-red-600 hover:text-red-800"><span class="iconify" data-icon="icon-park-solid:delete"></span></button>
+                    </td>
+                </tr>
+            `}).join('');
+        }
 
+        function openUserModal(userId = null) {
+            const modal = document.getElementById('user-modal');
+            const form = document.getElementById('user-form');
+            form.reset();
+            
+            if (userId) {
+                const user = users.find(u => u.id === userId);
+                document.getElementById('user-modal-title').textContent = 'Edit User';
+                document.getElementById('user-id').value = user.id;
+                document.getElementById('user-email').value = user.email;
+                document.getElementById('user-role').value = user.role;
+                document.getElementById('user-status').value = user.status;
+                document.getElementById('user-password').value = '';
+            } else {
+                document.getElementById('user-modal-title').textContent = 'Add User';
+                document.getElementById('user-id').value = '';
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.add('hidden');
+        }
+
+        document.getElementById('user-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('user-id').value;
+            const userData = {
+                email: document.getElementById('user-email').value,
+                role: document.getElementById('user-role').value,
+                status: document.getElementById('user-status').value
+            };
+
+            if (id) {
+                const index = users.findIndex(u => u.id == id);
+                users[index] = { ...users[index], ...userData };
+            } else {
+                users.push({ id: Date.now(), ...userData });
+            }
+            
             closeUserModal();
             renderUsers();
             updateStats();
         });
 
-        window.exportDownloads = function() {
-            if (downloads.length === 0) {
-                alert('No downloads to export');
-                return;
+        function editUser(id) { openUserModal(id); }
+        
+        function deleteUser(id) {
+            if(confirm('Remove this user?')) {
+                users = users.filter(u => u.id !== id);
+                renderUsers();
+                updateStats();
             }
-            const csv = 'Student Name,Email,Grade,Date,Game\n' + 
-                downloads.map(dl => 
-                    `"${dl.studentName}","${dl.email}",${dl.grade},${dl.date},"${dl.game || 'Demo Pack'}"`
-                ).join('\n');
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'downloads.csv';
-            a.click();
-        };
-
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
         }
 
-        window.editGame = editGame;
-        window.deleteGame = deleteGame;
-        window.editUser = editUser;
-        window.deleteUser = deleteUser;
+        // Downloads
+        function renderDownloads() {
+            const tbody = document.getElementById('downloads-table');
+            if (downloads.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">No downloads yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = downloads.map(d => `
+                <tr class="hover:bg-gray-50">
+                    <td class="px-6 py-4 font-medium">${d.name}</td>
+                    <td class="px-6 py-4">${d.grade}</td>
+                    <td class="px-6 py-4">${d.email}</td>
+                    <td class="px-6 py-4">${new Date(d.date).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+        }
 
-        updateStats();
+        function exportDownloads() {
+            alert('CSV export functionality would download a file here.');
+        }
+
+        // Initialize
+        checkAuth();
     </script>
 </body>
 </html>
