@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduQuest Games - Fun STEM Learning for Middle Schoolers</title>
+    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@3/dist/iconify.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--light);
+        }
+
+        nav {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        .btn-login {
+            background: var(--accent);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            color: var(--dark) !important;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .features {
+            padding: 5rem 2rem;
+            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+
+        .games {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .game-image {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: white;
+        }
+
+        .game-info {
+            padding: 1.5rem;
+        }
+
+        .game-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .game-info p {
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .game-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            background: var(--primary);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        .testimonials {
+            padding: 5rem 2rem;
+            background: white;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .testimonial-card p {
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--dark);
+        }
+
+        .download {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            color: var(--dark);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: var(--dark);
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #d97706;
+        }
+
+        .success-message {
+            display: none;
+            background: var(--success);
+            color: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .social-links a {
+            color: white;
+            font-size: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="iconify" data-icon="icon-park-solid:game-console"></span>
+                EduQuest Games
+            </a>
+            <ul class="nav-links">
+                <li><a href="#features"><span class="iconify" data-icon="icon-park-solid:star"></span> Features</a></li>
+                <li><a href="#games"><span class="iconify" data-icon="icon-park-solid:game-handle"></span> Games</a></li>
+                <li><a href="#testimonials"><span class="iconify" data-icon="icon-park-solid:comment"></span> Reviews</a></li>
+                <li><a href="login.html" class="btn-login"><span class="iconify" data-icon="icon-park-solid:user"></span> Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Make STEM Learning an Epic Adventure!</h1>
+            <p>Engaging educational games that make math, science, and coding fun for middle schoolers. Download your free demo today!</p>
+            <a href="#download" class="cta-button">
+                <span class="iconify" data-icon="icon-park-solid:download-one"></span> Get Free Demo
+            </a>
+        </div>
+    </section>
+
+    <section id="features" class="features">
+        <h2 class="section-title">Why Students Love EduQuest</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="iconify" data-icon="icon-park-solid:book-open"></span>
+                </div>
+                <h3>Curriculum Aligned</h3>
+                <p>Games designed to match middle school STEM standards and learning objectives.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="iconify" data-icon="icon-park-solid:medal"></span>
+                </div>
+                <h3>Gamified Learning</h3>
+                <p>Earn badges, level up, and compete with friends while mastering concepts.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="iconify" data-icon="icon-park-solid:experiment"></span>
+                </div>
+                <h3>Hands-On Practice</h3>
+                <p>Interactive challenges that let students learn by doing, not just watching.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="iconify" data-icon="icon-park-solid:multiplayer"></span>
+                </div>
+                <h3>Multiplayer Mode</h3>
+                <p>Team up with classmates to solve problems and complete quests together.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="iconify" data-icon="icon-park-solid:chart-line"></span>
+                </div>
+                <h3>Progress Tracking</h3>
+                <p>Real-time dashboards show students and teachers mastery of each topic.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="iconify" data-icon="icon-park-solid:palette"></span>
+                </div>
+                <h3>Vibrant Worlds</h3>
+                <p>Explore colorful, immersive environments that make learning exciting.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="games" class="games">
+        <h2 class="section-title">Our Game Collection</h2>
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-image">
+                    <span class="iconify" data-icon="icon-park-solid:atom"></span>
+                </div>
+                <div class="game-info">
+                    <h3>Chemistry Quest</h3>
+                    <p>Mix elements, create reactions, and solve molecular puzzles!</p>
+                    <div class="game-meta">
+                        <span class="badge">Grades 6-8</span>
+                        <span class="iconify" data-icon="icon-park-solid:star"></span> 4.9
+                    </div>
+                </div>
+            </div>
+            <div class="game-card">
+                <div class="game-image">
+                    <span class="iconify" data-icon="icon-park-solid:code"></span>
+                </div>
+                <div class="game-info">
+                    <h3>Code Academy</h3>
+                    <p>Learn programming logic by building games and solving challenges.</p>
+                    <div class="game-meta">
+                        <span class="badge">Grades 6-8</span>
+                        <span class="iconify" data-icon="icon-park-solid:star"></span> 4.8
+                    </div>
+                </div>
+            </div>
+            <div class="game-card">
+                <div class="game-image">
+                    <span class="iconify" data-icon="icon-park-solid:rocket"></span>
+                </div>
+                <div class="game-info">
+                    <h3>Engineering Builder</h3>
+                    <p>Design bridges, launch rockets, and test physics principles.</p>
+                    <div class="game-meta">
+                        <span class="badge">Grades 7-8</span>
+                        <span class="iconify" data-icon="icon-park-solid:star"></span> 4.7
+                    </div>
+                </div>
+            </div>
+            <div class="game-card">
+                <div class="game-image">
+                    <span class="iconify" data-icon="icon-park-solid:function"></span>
+                </div>
+                <div class="game-info">
+                    <h3>Math Adventures</h3>
+                    <p>Master algebra, geometry, and fractions through epic quests.</p>
+                    <div class="game-meta">
+                        <span class="badge">Grades 6-8</span>
+                        <span class="iconify" data-icon="icon-park-solid:star"></span> 4.8
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" class="testimonials">
+        <h2 class="section-title">What Teachers & Parents Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p>"My students are actually excited about math class now! The gamification keeps them engaged for hours."</p>
+                <div class="testimonial-author">Sarah M., 7th Grade Teacher</div>
+            </div>
+            <div class="testimonial-card">
+                <p>"Finally, educational games that don't feel like homework. My son asks to play Chemistry Quest every day!"</p>
+                <div class="testimonial-author">Mike R., Parent</div>
+            </div>
+            <div class="testimonial-card">
+                <p>"I went from hating science to loving it. The experiments in the game are so cool and fun!"</p>
+                <div class="testimonial-author">Alex T., 8th Grade Student</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="download" class="download">
+        <h2 class="section-title" style="color: white;">Download Your Free Demo</h2>
+        <div class="form-container">
+            <form id="demoForm">
+                <div class="form-group">
+                    <label for="studentName">Student Name</label>
+                    <input type="text" id="studentName" required placeholder="Enter student's full name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Parent Email</label>
+                    <input type="email" id="email" required placeholder="parent@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="grade">Grade Level</label>
+                    <select id="grade" required>
+                        <option value="">Select grade</option>
+                        <option value="6">6th Grade</option>
+                        <option value="7">7th Grade</option>
+                        <option value="8">8th Grade</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">
+                    <span class="iconify" data-icon="icon-park-solid:download-one"></span> Download Free Demo
+                </button>
+            </form>
+            <div class="success-message" id="successMessage">
+                <span class="iconify" data-icon="icon-park-solid:check-circle"></span> Thank you! Your demo download link has been sent to your email.
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="logo" style="justify-content: center; margin-bottom: 1rem;">
+                <span class="iconify" data-icon="icon-park-solid:game-console"></span>
+                EduQuest Games
+            </div>
+            <p>Making STEM education fun and accessible for all students.</p>
+            <div class="social-links">
+                <a href="#"><span class="iconify" data-icon="icon-park-solid:facebook"></span></a>
+                <a href="#"><span class="iconify" data-icon="icon-park-solid:twitter"></span></a>
+                <a href="#"><span class="iconify" data-icon="icon-park-solid:instagram"></span></a>
+                <a href="#"><span class="iconify" data-icon="icon-park-solid:youtube"></span></a>
+            </div>
+            <p>&copy; 2024 EduQuest Games. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('demoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.getElementById('demoForm').style.display = 'none';
+            document.getElementById('successMessage').style.display = 'block';
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
