@@ -429,38 +429,88 @@
         </div>
     </footer>
 
-    <script>
-        // Form submission handler
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            // Simple validation
-            if (email && password) {
-                // Show success message (in production, this would authenticate with a backend)
-                alert('Login successful! Welcome back to EduQuest Games! 🎮');
-                
-                // Redirect to dashboard or home page
-                window.location.href = 'index.html';
-            } else {
-                alert('Please fill in all fields.');
-            }
+    <script type="module">
+      import { supabase } from './supabase-config.js';
+
+      // Check if user is logged in on page load
+      async function checkAuth() {
+        if (!supabase) {
+          console.warn('Supabase not configured. Using demo mode.');
+          return;
+        }
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+          window.currentUser = session.user;
+          updateUIForLoggedInUser(session.user);
+        }
+      }
+
+      // Login form handler
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        if (!supabase) {
+          // Demo mode fallback
+          alert('Supabase not configured. Please update supabase-config.js with your credentials.');
+          return;
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password
         });
 
-        // Add animation on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginContainer = document.querySelector('.login-container');
-            loginContainer.style.opacity = '0';
-            loginContainer.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                loginContainer.style.transition = 'all 0.5s ease';
-                loginContainer.style.opacity = '1';
-                loginContainer.style.transform = 'translateY(0)';
-            }, 100);
-        });
+        if (error) {
+          alert('Login failed: ' + error.message);
+          return;
+        }
+
+        // Store user info
+        window.currentUser = data.user;
+        
+        // Redirect based on role
+        const userRole = data.user.user_metadata?.role || 'student';
+        
+        if (userRole === 'admin') {
+          window.location.href = 'admin.html';
+        } else {
+          window.location.href = 'index.html';
+        }
+      });
+
+      // Logout function (can be called from other pages)
+      window.logout = async function() {
+        if (supabase) {
+          await supabase.auth.signOut();
+        }
+        window.currentUser = null;
+        window.location.href = 'index.html';
+      };
+
+      // Update UI based on login status
+      function updateUIForLoggedInUser(user) {
+        const role = user.user_metadata?.role || 'student';
+        console.log(`Logged in as ${role}: ${user.email}`);
+      }
+
+      // Initialize auth check
+      checkAuth();
+
+      // Add animation on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        const loginContainer = document.querySelector('.login-container');
+        loginContainer.style.opacity = '0';
+        loginContainer.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+          loginContainer.style.transition = 'all 0.5s ease';
+          loginContainer.style.opacity = '1';
+          loginContainer.style.transform = 'translateY(0)';
+        }, 100);
+      });
     </script>
 </body>
 </html>
