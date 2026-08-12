@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduQuest Admin Dashboard</title>
+    <title>Admin Dashboard - EduQuest Games</title>
+    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@3/dist/iconify.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -11,93 +12,94 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+            background: var(--light);
         }
 
-        .admin-container {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 280px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
-            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .nav-menu {
-            list-style: none;
-        }
-
-        .nav-menu li {
-            margin-bottom: 1rem;
-        }
-
-        .nav-menu a {
-            display: block;
-            padding: 1rem;
-            color: #333;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .nav-menu a:hover,
-        .nav-menu a.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-        }
-
-        .logout-btn {
-            margin-top: 2rem;
-            background: #ff4757;
-            color: white;
-            border: none;
-            padding: 1rem;
-            width: 100%;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: transform 0.2s;
-        }
-
-        .logout-btn:hover {
-            transform: scale(1.02);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 2rem;
-            overflow-y: auto;
-        }
-
-        .header {
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 1.5rem;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .header h1 {
-            color: #333;
+        .admin-logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .admin-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .admin-nav button {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            transition: background 0.3s;
+        }
+
+        .admin-nav button:hover,
+        .admin-nav button.active {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.3) !important;
+        }
+
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.5) !important;
+        }
+
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .stats-grid {
@@ -108,105 +110,154 @@
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             padding: 1.5rem;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 0.5rem;
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
         }
 
-        .stat-label {
-            color: #666;
+        .stat-icon.primary { background: rgba(99, 102, 241, 0.1); color: var(--primary); }
+        .stat-icon.success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .stat-icon.warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+        .stat-icon.accent { background: rgba(139, 92, 246, 0.1); color: var(--secondary); }
+
+        .stat-info h3 {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+
+        .stat-info p {
+            color: #64748b;
             font-size: 0.9rem;
         }
 
-        /* Games Management */
-        .content-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2rem;
+        .data-table {
+            background: white;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        .section-header {
+        .table-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--light);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
         }
 
-        .btn {
-            padding: 0.8rem 1.5rem;
+        .add-btn {
+            background: var(--primary);
+            color: white;
             border: none;
+            padding: 0.6rem 1.2rem;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-weight: 500;
+            transition: background 0.3s;
         }
 
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+        .add-btn:hover {
+            background: var(--primary-dark);
         }
 
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-danger {
-            background: #ff4757;
-            color: white;
-        }
-
-        .btn-edit {
-            background: #ffa502;
-            color: white;
-        }
-
-        /* Table */
-        .games-table {
+        table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .games-table th,
-        .games-table td {
-            padding: 1rem;
+        th, td {
+            padding: 1rem 1.5rem;
             text-align: left;
-            border-bottom: 1px solid #eee;
         }
 
-        .games-table th {
-            background: #f8f9fa;
-            font-weight: bold;
-            color: #333;
+        th {
+            background: var(--light);
+            font-weight: 600;
+            color: var(--dark);
         }
 
-        .games-table tr:hover {
-            background: #f8f9fa;
+        tr:not(:last-child) {
+            border-bottom: 1px solid var(--light);
         }
 
-        .action-buttons {
+        tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .role-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .role-admin { background: rgba(139, 92, 246, 0.1); color: var(--secondary); }
+        .role-teacher { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .role-student { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .status-active { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .status-inactive { background: rgba(100, 116, 139, 0.1); color: #64748b; }
+        .status-suspended { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+        .action-btns {
             display: flex;
             gap: 0.5rem;
         }
 
-        .action-buttons button {
-            padding: 0.5rem 1rem;
-            font-size: 0.8rem;
+        .action-btn {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s;
         }
 
-        /* Modal */
-        .modal {
+        .edit-btn {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+        }
+
+        .edit-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .delete-btn:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        .modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -215,20 +266,20 @@
             height: 100%;
             background: rgba(0,0,0,0.5);
             z-index: 1000;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
         }
 
-        .modal.active {
+        .modal-overlay.active {
             display: flex;
         }
 
-        .modal-content {
+        .modal {
             background: white;
             padding: 2rem;
             border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
+            width: 100%;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
         }
@@ -240,839 +291,624 @@
             margin-bottom: 1.5rem;
         }
 
+        .modal-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+        }
+
         .close-modal {
             background: none;
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #666;
+            color: #64748b;
         }
 
         .form-group {
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: bold;
-            color: #333;
+            font-weight: 500;
+            color: var(--dark);
         }
 
         .form-group input,
-        .form-group textarea,
-        .form-group select {
+        .form-group select,
+        .form-group textarea {
             width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #ddd;
+            padding: 0.7rem;
+            border: 2px solid #e2e8f0;
             border-radius: 8px;
             font-size: 1rem;
-            transition: border-color 0.3s;
         }
 
         .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
         }
 
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        /* Downloads Section */
-        .downloads-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .download-item {
-            padding: 1rem;
-            border-bottom: 1px solid #eee;
+        .modal-actions {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .download-item:last-child {
-            border-bottom: none;
-        }
-
-        .download-info {
+        .save-btn {
             flex: 1;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        .download-date {
-            color: #666;
-            font-size: 0.8rem;
+        .cancel-btn {
+            flex: 1;
+            background: #e2e8f0;
+            color: var(--dark);
+            border: none;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .admin-container {
+            .admin-header {
                 flex-direction: column;
+                gap: 1rem;
             }
 
-            .sidebar {
-                width: 100%;
-                padding: 1rem;
-            }
-
-            .nav-menu {
-                display: flex;
+            .admin-nav {
                 flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            .nav-menu li {
-                margin-bottom: 0;
+                justify-content: center;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .games-table {
-                font-size: 0.8rem;
+            table {
+                font-size: 0.85rem;
             }
 
-            .action-buttons {
-                flex-direction: column;
-            }
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 1rem 2rem;
-            background: #2ed573;
-            color: white;
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            z-index: 2000;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+            th, td {
+                padding: 0.7rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="loginScreen" class="admin-container" style="justify-content: center; align-items: center;">
-        <div class="content-section" style="width: 100%; max-width: 400px; text-align: center;">
-            <h2 style="margin-bottom: 1.5rem; color: #667eea;">Admin Login</h2>
-            <div class="form-group">
-                <input type="email" id="adminEmail" placeholder="Email" value="admin@eduquest.com">
-            </div>
-            <div class="form-group">
-                <input type="password" id="adminPassword" placeholder="Password" value="admin123">
-            </div>
-            <button class="btn btn-primary" onclick="adminLogin()" style="width: 100%;">Login</button>
-            <p id="loginError" style="color: #ff4757; margin-top: 1rem; display: none;">
-                <span id="loginErrorText">Invalid credentials</span>
-            </p>
+    <header class="admin-header">
+        <div class="admin-logo">
+            <span class="iconify" data-icon="icon-park-solid:game-console"></span>
+            EduQuest Admin
         </div>
+        <nav class="admin-nav">
+            <button onclick="showSection('dashboard')" class="active" id="nav-dashboard">
+                <span class="iconify" data-icon="icon-park-solid:chart-line"></span> Dashboard
+            </button>
+            <button onclick="showSection('games')" id="nav-games">
+                <span class="iconify" data-icon="icon-park-solid:game-handle"></span> Games
+            </button>
+            <button onclick="showSection('users')" id="nav-users">
+                <span class="iconify" data-icon="icon-park-solid:user"></span> Users
+            </button>
+            <button onclick="showSection('downloads')" id="nav-downloads">
+                <span class="iconify" data-icon="icon-park-solid:download-one"></span> Downloads
+            </button>
+            <button onclick="logout()" class="logout-btn">
+                <span class="iconify" data-icon="icon-park-solid:logout"></span> Logout
+            </button>
+        </nav>
+    </header>
+
+    <div class="admin-container">
+        <section id="dashboard" class="section active">
+            <h2 class="section-title">
+                <span class="iconify" data-icon="icon-park-solid:chart-line"></span> Dashboard Overview
+            </h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon primary">
+                        <span class="iconify" data-icon="icon-park-solid:game-handle"></span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalGames">4</h3>
+                        <p>Total Games</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon success">
+                        <span class="iconify" data-icon="icon-park-solid:user"></span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalUsers">0</h3>
+                        <p>Total Users</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon warning">
+                        <span class="iconify" data-icon="icon-park-solid:download-one"></span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalDownloads">0</h3>
+                        <p>Total Downloads</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon accent">
+                        <span class="iconify" data-icon="icon-park-solid:star"></span>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="avgRating">4.8</h3>
+                        <p>Average Rating</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="games" class="section">
+            <h2 class="section-title">
+                <span class="iconify" data-icon="icon-park-solid:game-handle"></span> Manage Games
+            </h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>All Games</h3>
+                    <button class="add-btn" onclick="openGameModal()">
+                        <span class="iconify" data-icon="icon-park-solid:plus"></span> Add Game
+                    </button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Subject</th>
+                            <th>Grade Level</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="gamesTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="users" class="section">
+            <h2 class="section-title">
+                <span class="iconify" data-icon="icon-park-solid:user"></span> Manage Users
+            </h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>All Users</h3>
+                    <button class="add-btn" onclick="openUserModal()">
+                        <span class="iconify" data-icon="icon-park-solid:plus"></span> Add User
+                    </button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="downloads" class="section">
+            <h2 class="section-title">
+                <span class="iconify" data-icon="icon-park-solid:download-one"></span> Download History
+            </h2>
+            <div class="data-table">
+                <div class="table-header">
+                    <h3>All Downloads</h3>
+                    <button class="add-btn" onclick="exportDownloads()">
+                        <span class="iconify" data-icon="icon-park-solid:export"></span> Export CSV
+                    </button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student Name</th>
+                            <th>Email</th>
+                            <th>Grade</th>
+                            <th>Date</th>
+                            <th>Game</th>
+                        </tr>
+                    </thead>
+                    <tbody id="downloadsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
 
-    <!-- Admin Dashboard -->
-    <div id="adminDashboard" class="admin-container hidden">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo">🎮 EduQuest Admin</div>
-            <ul class="nav-menu">
-                <li><a href="#" class="active" onclick="showSection('dashboard')">📊 Dashboard</a></li>
-                <li><a href="#" onclick="showSection('games')">🎯 Manage Games</a></li>
-                <li><a href="#" onclick="showSection('users')">👥 Manage Users</a></li>
-                <li><a href="#" onclick="showSection('downloads')">📥 Downloads</a></li>
-            </ul>
-            <button class="logout-btn" onclick="adminLogout()">Logout</button>
-        </aside>
-
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Header -->
-            <div class="header">
-                <h1 id="pageTitle">Dashboard</h1>
-                <div id="adminName">Welcome, Admin</div>
-            </div>
-
-            <!-- Dashboard Section -->
-            <div id="dashboardSection">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalGames">0</div>
-                        <div class="stat-label">Total Games</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalDownloads">0</div>
-                        <div class="stat-label">Total Downloads</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="totalStudents">0</div>
-                        <div class="stat-label">Registered Students</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-number" id="avgRating">4.8</div>
-                        <div class="stat-label">Average Rating</div>
-                    </div>
-                </div>
-
-                <div class="content-section">
-                    <h2>Recent Activity</h2>
-                    <div id="recentActivity" style="margin-top: 1rem; color: #666;">
-                        Loading recent activity...
-                    </div>
-                </div>
-            </div>
-
-            <!-- Games Management Section -->
-            <div id="gamesSection" class="hidden">
-                <div class="content-section">
-                    <div class="section-header">
-                        <h2>Game Library</h2>
-                        <button class="btn btn-primary" onclick="openGameModal()">+ Add New Game</button>
-                    </div>
-                    <table class="games-table">
-                        <thead>
-                            <tr>
-                                <th>Game Name</th>
-                                <th>Subject</th>
-                                <th>Grade Level</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="gamesTableBody">
-                            <!-- Games will be loaded here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Downloads Section -->
-            <div id="downloadsSection" class="hidden">
-                <div class="content-section">
-                    <div class="section-header">
-                        <h2>Recent Downloads</h2>
-                        <button class="btn btn-primary" onclick="exportDownloads()">📥 Export CSV</button>
-                    </div>
-                    <div class="downloads-list" id="downloadsList">
-                        <!-- Downloads will be loaded here -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Users Management Section -->
-            <div id="usersSection" class="hidden">
-                <div class="content-section">
-                    <div class="section-header">
-                        <h2>User Management</h2>
-                        <button class="btn btn-primary" onclick="openUserModal()">+ Add New User</button>
-                    </div>
-                    <table class="games-table">
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Status</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <!-- Users will be loaded here -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Game Modal -->
-    <div id="gameModal" class="modal">
-        <div class="modal-content">
+    <div class="modal-overlay" id="gameModal">
+        <div class="modal">
             <div class="modal-header">
-                <h2 id="modalTitle">Add New Game</h2>
+                <h3 class="modal-title" id="gameModalTitle">Add New Game</h3>
                 <button class="close-modal" onclick="closeGameModal()">&times;</button>
             </div>
-            <form id="gameForm" onsubmit="saveGame(event)">
+            <form id="gameForm">
                 <input type="hidden" id="gameId">
                 <div class="form-group">
-                    <label for="gameName">Game Name *</label>
-                    <input type="text" id="gameName" required>
+                    <label>Game Name</label>
+                    <input type="text" id="gameName" required placeholder="Enter game name">
                 </div>
                 <div class="form-group">
-                    <label for="gameSubject">Subject *</label>
+                    <label>Subject</label>
                     <select id="gameSubject" required>
-                        <option value="">Select Subject</option>
+                        <option value="">Select subject</option>
                         <option value="Chemistry">Chemistry</option>
                         <option value="Coding">Coding</option>
                         <option value="Engineering">Engineering</option>
-                        <option value="Mathematics">Mathematics</option>
+                        <option value="Math">Math</option>
                         <option value="Physics">Physics</option>
                         <option value="Biology">Biology</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="gameGrade">Grade Level *</label>
+                    <label>Grade Level</label>
                     <select id="gameGrade" required>
-                        <option value="">Select Grade</option>
-                        <option value="6th Grade">6th Grade</option>
-                        <option value="7th Grade">7th Grade</option>
-                        <option value="8th Grade">8th Grade</option>
-                        <option value="6th-8th Grade">6th-8th Grade</option>
+                        <option value="">Select grade</option>
+                        <option value="6-8">Grades 6-8</option>
+                        <option value="6-7">Grades 6-7</option>
+                        <option value="7-8">Grades 7-8</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="gameDescription">Description *</label>
-                    <textarea id="gameDescription" required></textarea>
+                    <label>Description</label>
+                    <textarea id="gameDescription" rows="3" required placeholder="Enter game description"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="gameImage">Image URL</label>
-                    <input type="url" id="gameImage" placeholder="https://example.com/image.png">
-                </div>
-                <div class="form-group">
-                    <label for="gameStatus">Status</label>
-                    <select id="gameStatus">
+                    <label>Status</label>
+                    <select id="gameStatus" required>
                         <option value="active">Active</option>
-                        <option value="draft">Draft</option>
-                        <option value="archived">Archived</option>
+                        <option value="inactive">Inactive</option>
                     </select>
                 </div>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button type="button" class="btn" onclick="closeGameModal()" style="background: #ddd;">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Game</button>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeGameModal()">Cancel</button>
+                    <button type="submit" class="save-btn">Save Game</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- User Modal -->
-    <div id="userModal" class="modal">
-        <div class="modal-content">
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
             <div class="modal-header">
-                <h2 id="userModalTitle">Add New User</h2>
+                <h3 class="modal-title" id="userModalTitle">Add New User</h3>
                 <button class="close-modal" onclick="closeUserModal()">&times;</button>
             </div>
-            <form id="userForm" onsubmit="saveUser(event)">
+            <form id="userForm">
                 <input type="hidden" id="userId">
                 <div class="form-group">
-                    <label for="userEmail">Email *</label>
-                    <input type="email" id="userEmail" required>
+                    <label>Email Address</label>
+                    <input type="email" id="userEmail" required placeholder="user@example.com">
                 </div>
                 <div class="form-group">
-                    <label for="userPassword">Password *</label>
-                    <input type="password" id="userPassword" required minlength="6">
+                    <label>Password</label>
+                    <input type="password" id="userPassword" placeholder="Leave blank to keep current">
                 </div>
                 <div class="form-group">
-                    <label for="userRole">Role *</label>
+                    <label>Role</label>
                     <select id="userRole" required>
-                        <option value="">Select Role</option>
-                        <option value="admin">Admin</option>
-                        <option value="teacher">Teacher</option>
                         <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="admin">Admin</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="userStatus">Status</label>
-                    <select id="userStatus">
+                    <label>Status</label>
+                    <select id="userStatus" required>
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                         <option value="suspended">Suspended</option>
                     </select>
                 </div>
-                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
-                    <button type="button" class="btn" onclick="closeUserModal()" style="background: #ddd;">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save User</button>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeUserModal()">Cancel</button>
+                    <button type="submit" class="save-btn">Save User</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <script>
-        // Data Storage
-        let games = JSON.parse(localStorage.getItem('eduquest_games')) || [
-            { id: 1, name: 'Molecule Masters', subject: 'Chemistry', grade: '6th-8th Grade', description: 'Build molecules and discover chemical reactions!', image: 'https://images.unsplash.com/photo-1636466497217-26a8cbeaf0aa?w=400', status: 'active' },
-            { id: 2, name: 'Code Quest', subject: 'Coding', grade: '6th-8th Grade', description: 'Learn programming through epic adventures!', image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400', status: 'active' },
-            { id: 3, name: 'Engineer Island', subject: 'Engineering', grade: '7th-8th Grade', description: 'Design and build amazing structures!', image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400', status: 'active' },
-            { id: 4, name: 'Math Galaxy', subject: 'Mathematics', grade: '6th-8th Grade', description: 'Explore the universe through math!', image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400', status: 'active' }
-        ];
+    <script type="module">
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-        let downloads = JSON.parse(localStorage.getItem('eduquest_downloads')) || [
-            { id: 1, studentName: 'Alex Johnson', email: 'alex@example.com', game: 'Molecule Masters', date: '2024-01-15' },
-            { id: 2, studentName: 'Sarah Chen', email: 'sarah@example.com', game: 'Code Quest', date: '2024-01-14' },
-            { id: 3, studentName: 'Mike Rodriguez', email: 'mike@example.com', game: 'Engineer Island', date: '2024-01-13' },
-            { id: 4, studentName: 'Emma Wilson', email: 'emma@example.com', game: 'Math Galaxy', date: '2024-01-12' }
-        ];
-
-        // Users data - stored in localStorage
-        let users = JSON.parse(localStorage.getItem('eduquest_users')) || [
-            { id: 1, email: 'admin@eduquest.com', role: 'admin', status: 'active', created: '2024-01-01' },
-            { id: 2, email: 'teacher@eduquest.com', role: 'teacher', status: 'active', created: '2024-01-05' },
-            { id: 3, email: 'student@eduquest.com', role: 'student', status: 'active', created: '2024-01-10' }
-        ];
-
-        // Supabase Integration
-        let supabase;
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
         
-        async function initSupabase() {
-            try {
-                const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
-                const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-                const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-                
-                if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
-                    console.warn('Supabase not configured. Using localStorage fallback.');
-                    return null;
-                }
-                
-                supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                return supabase;
-            } catch (error) {
-                console.error('Failed to initialize Supabase:', error);
-                return null;
-            }
+        let supabase;
+        if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
+            supabase = createClient(supabaseUrl, supabaseKey);
         }
 
-        // Authentication
-        async function adminLogin() {
-            const email = document.getElementById('adminEmail').value;
-            const password = document.getElementById('adminPassword').value;
+        let games = [
+            { id: 1, name: 'Chemistry Quest', subject: 'Chemistry', grade: '6-8', status: 'active' },
+            { id: 2, name: 'Code Academy', subject: 'Coding', grade: '6-8', status: 'active' },
+            { id: 3, name: 'Engineering Builder', subject: 'Engineering', grade: '7-8', status: 'active' },
+            { id: 4, name: 'Math Adventures', subject: 'Math', grade: '6-8', status: 'active' }
+        ];
 
-            if (!supabase) {
-                // Fallback to localStorage
-                if (email === 'admin@eduquest.com' && password === 'admin123') {
-                    localStorage.setItem('eduquest_admin', 'true');
-                    localStorage.setItem('currentUser', JSON.stringify({ email, role: 'admin' }));
-                    showDashboard();
-                } else {
-                    document.getElementById('loginError').style.display = 'block';
-                }
-                return;
-            }
+        let users = [];
+        let downloads = [];
 
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email,
-                password
-            });
-
-            if (error) {
-                document.getElementById('loginErrorText').textContent = error.message;
-                document.getElementById('loginError').style.display = 'block';
-                return;
-            }
-
-            // Check if user has admin role
-            const userRole = data.user.user_metadata?.role || 'student';
-            if (userRole !== 'admin') {
-                document.getElementById('loginErrorText').textContent = 'Access denied. Admin privileges required.';
-                document.getElementById('loginError').style.display = 'block';
-                return;
-            }
-
-            localStorage.setItem('eduquest_admin', 'true');
-            localStorage.setItem('currentUser', JSON.stringify({ 
-                email: data.user.email, 
-                role: 'admin',
-                id: data.user.id
-            }));
-            showDashboard();
-        }
-
-        async function adminLogout() {
-            if (supabase) {
-                await supabase.auth.signOut();
-            }
-            localStorage.removeItem('eduquest_admin');
-            localStorage.removeItem('currentUser');
-            location.reload();
-        }
-
-        async function checkAuth() {
-            // Initialize Supabase
-            supabase = await initSupabase();
-
-            if (supabase) {
-                const { data: { session } } = await supabase.auth.getSession();
-                if (session) {
-                    const userRole = session.user.user_metadata?.role || 'student';
-                    if (userRole === 'admin') {
-                        localStorage.setItem('eduquest_admin', 'true');
-                        localStorage.setItem('currentUser', JSON.stringify({ 
-                            email: session.user.email, 
-                            role: 'admin',
-                            id: session.user.id
-                        }));
-                        showDashboard();
-                        return;
-                    }
-                }
-            }
+        window.showSection = function(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.admin-nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            document.getElementById('nav-' + sectionId).classList.add('active');
             
-            // Fallback to localStorage
-            if (localStorage.getItem('eduquest_admin') === 'true') {
-                showDashboard();
+            if (sectionId === 'games') renderGames();
+            if (sectionId === 'users') renderUsers();
+            if (sectionId === 'downloads') renderDownloads();
+            if (sectionId === 'dashboard') updateStats();
+        };
+
+        window.logout = function() {
+            if (supabase) {
+                supabase.auth.signOut();
             }
-        }
+            window.location.href = 'login.html';
+        };
 
-        function showDashboard() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('adminDashboard').classList.remove('hidden');
-            loadDashboard();
-        }
-
-        // Navigation
-        function showSection(section) {
-            document.getElementById('dashboardSection').classList.add('hidden');
-            document.getElementById('gamesSection').classList.add('hidden');
-            document.getElementById('downloadsSection').classList.add('hidden');
-            document.getElementById('usersSection').classList.add('hidden');
-
-            document.querySelectorAll('.nav-menu a').forEach(a => a.classList.remove('active'));
-
-            if (section === 'dashboard') {
-                document.getElementById('dashboardSection').classList.remove('hidden');
-                document.querySelector('.nav-menu a:nth-child(1)').classList.add('active');
-                document.getElementById('pageTitle').textContent = 'Dashboard';
-                loadDashboard();
-            } else if (section === 'games') {
-                document.getElementById('gamesSection').classList.remove('hidden');
-                document.querySelector('.nav-menu a:nth-child(2)').classList.add('active');
-                document.getElementById('pageTitle').textContent = 'Manage Games';
-                loadGames();
-            } else if (section === 'users') {
-                document.getElementById('usersSection').classList.remove('hidden');
-                document.querySelector('.nav-menu a:nth-child(3)').classList.add('active');
-                document.getElementById('pageTitle').textContent = 'Manage Users';
-                loadUsers();
-            } else if (section === 'downloads') {
-                document.getElementById('downloadsSection').classList.remove('hidden');
-                document.querySelector('.nav-menu a:nth-child(4)').classList.add('active');
-                document.getElementById('pageTitle').textContent = 'Downloads';
-                loadDownloads();
-            }
-        }
-
-        // Dashboard
-        function loadDashboard() {
-            document.getElementById('totalGames').textContent = games.length;
-            document.getElementById('totalDownloads').textContent = downloads.length;
-            document.getElementById('totalStudents').textContent = downloads.length;
-
-            const recentActivity = downloads.slice(0, 5).map(d => 
-                `<div style="padding: 0.5rem 0; border-bottom: 1px solid #eee;">
-                    <strong>${d.studentName}</strong> downloaded ${d.game} on ${d.date}
-                </div>`
-            ).join('');
-
-            document.getElementById('recentActivity').innerHTML = recentActivity || 'No recent activity';
-        }
-
-        // Games Management
-        function loadGames() {
+        function renderGames() {
             const tbody = document.getElementById('gamesTableBody');
             tbody.innerHTML = games.map(game => `
                 <tr>
-                    <td>${game.name}</td>
-                    <td>${game.subject}</td>
-                    <td>${game.grade}</td>
-                    <td><span style="color: ${game.status === 'active' ? '#2ed573' : '#ffa502'}">${game.status}</span></td>
+                    <td><strong>${escapeHtml(game.name)}</strong></td>
+                    <td>${escapeHtml(game.subject)}</td>
+                    <td>${escapeHtml(game.grade)}</td>
+                    <td><span class="status-badge status-${game.status}">${game.status}</span></td>
                     <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-edit" onclick="editGame(${game.id})">Edit</button>
-                            <button class="btn btn-danger" onclick="deleteGame(${game.id})">Delete</button>
+                        <div class="action-btns">
+                            <button class="action-btn edit-btn" onclick="editGame(${game.id})">
+                                <span class="iconify" data-icon="icon-park-solid:edit"></span> Edit
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteGame(${game.id})">
+                                <span class="iconify" data-icon="icon-park-solid:delete"></span> Delete
+                            </button>
                         </div>
                     </td>
                 </tr>
             `).join('');
-
-            saveGamesToStorage();
         }
 
-        function openGameModal(game = null) {
-            document.getElementById('gameModal').classList.add('active');
-            
-            if (game) {
-                document.getElementById('modalTitle').textContent = 'Edit Game';
-                document.getElementById('gameId').value = game.id;
-                document.getElementById('gameName').value = game.name;
-                document.getElementById('gameSubject').value = game.subject;
-                document.getElementById('gameGrade').value = game.grade;
-                document.getElementById('gameDescription').value = game.description;
-                document.getElementById('gameImage').value = game.image || '';
-                document.getElementById('gameStatus').value = game.status;
-            } else {
-                document.getElementById('modalTitle').textContent = 'Add New Game';
-                document.getElementById('gameForm').reset();
-                document.getElementById('gameId').value = '';
+        function renderUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;">No users found. Add your first user!</td></tr>';
+                return;
             }
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${escapeHtml(user.email)}</td>
+                    <td><span class="role-badge role-${user.role}">${user.role}</span></td>
+                    <td><span class="status-badge status-${user.status}">${user.status}</span></td>
+                    <td>${user.created || 'Recently'}</td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="action-btn edit-btn" onclick="editUser('${escapeHtml(user.email)}')">
+                                <span class="iconify" data-icon="icon-park-solid:edit"></span> Edit
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteUser('${escapeHtml(user.email)}')">
+                                <span class="iconify" data-icon="icon-park-solid:delete"></span> Delete
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function closeGameModal() {
+        function renderDownloads() {
+            const tbody = document.getElementById('downloadsTableBody');
+            if (downloads.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#64748b;">No downloads yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = downloads.map(dl => `
+                <tr>
+                    <td>${escapeHtml(dl.studentName)}</td>
+                    <td>${escapeHtml(dl.email)}</td>
+                    <td>Grade ${escapeHtml(dl.grade)}</td>
+                    <td>${dl.date}</td>
+                    <td>${escapeHtml(dl.game || 'Demo Pack')}</td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalGames').textContent = games.length;
+            document.getElementById('totalUsers').textContent = users.length;
+            document.getElementById('totalDownloads').textContent = downloads.length;
+        }
+
+        window.openGameModal = function() {
+            document.getElementById('gameForm').reset();
+            document.getElementById('gameId').value = '';
+            document.getElementById('gameModalTitle').textContent = 'Add New Game';
+            document.getElementById('gameModal').classList.add('active');
+        };
+
+        window.closeGameModal = function() {
             document.getElementById('gameModal').classList.remove('active');
-        }
+        };
 
-        function saveGame(event) {
-            event.preventDefault();
-            
-            const gameId = document.getElementById('gameId').value;
+        window.editGame = function(id) {
+            const game = games.find(g => g.id === id);
+            if (!game) return;
+            document.getElementById('gameId').value = game.id;
+            document.getElementById('gameName').value = game.name;
+            document.getElementById('gameSubject').value = game.subject;
+            document.getElementById('gameGrade').value = game.grade;
+            document.getElementById('gameDescription').value = game.description || '';
+            document.getElementById('gameStatus').value = game.status;
+            document.getElementById('gameModalTitle').textContent = 'Edit Game';
+            document.getElementById('gameModal').classList.add('active');
+        };
+
+        window.deleteGame = function(id) {
+            if (confirm('Are you sure you want to delete this game?')) {
+                games = games.filter(g => g.id !== id);
+                renderGames();
+                updateStats();
+            }
+        };
+
+        document.getElementById('gameForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const id = document.getElementById('gameId').value;
             const gameData = {
-                id: gameId ? parseInt(gameId) : Date.now(),
                 name: document.getElementById('gameName').value,
                 subject: document.getElementById('gameSubject').value,
                 grade: document.getElementById('gameGrade').value,
                 description: document.getElementById('gameDescription').value,
-                image: document.getElementById('gameImage').value || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400',
                 status: document.getElementById('gameStatus').value
             };
 
-            if (gameId) {
-                const index = games.findIndex(g => g.id == gameId);
-                games[index] = gameData;
-                showNotification('Game updated successfully!');
+            if (id) {
+                const index = games.findIndex(g => g.id == id);
+                if (index !== -1) {
+                    games[index] = { ...games[index], ...gameData };
+                }
             } else {
-                games.push(gameData);
-                showNotification('Game added successfully!');
+                games.push({
+                    id: Date.now(),
+                    ...gameData
+                });
             }
 
             closeGameModal();
-            loadGames();
-            saveGamesToStorage();
-        }
+            renderGames();
+            updateStats();
+        });
 
-        function editGame(id) {
-            const game = games.find(g => g.id === id);
-            openGameModal(game);
-        }
-
-        function deleteGame(id) {
-            if (confirm('Are you sure you want to delete this game?')) {
-                games = games.filter(g => g.id !== id);
-                loadGames();
-                saveGamesToStorage();
-                showNotification('Game deleted successfully!');
-            }
-        }
-
-        function saveGamesToStorage() {
-            localStorage.setItem('eduquest_games', JSON.stringify(games));
-            loadDashboard();
-        }
-
-        // Downloads
-        function loadDownloads() {
-            const list = document.getElementById('downloadsList');
-            list.innerHTML = downloads.map(download => `
-                <div class="download-item">
-                    <div class="download-info">
-                        <strong>${download.studentName}</strong> (${download.email})
-                        <div class="download-date">Downloaded: ${download.game} on ${download.date}</div>
-                    </div>
-                </div>
-            `).reverse().join('');
-        }
-
-        function exportDownloads() {
-            const csv = 'Name,Email,Game,Date\n' + downloads.map(d => 
-                `${d.studentName},${d.email},${d.game},${d.date}`
-            ).join('\n');
-
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'eduquest_downloads.csv';
-            a.click();
-            showNotification('Downloads exported successfully!');
-        }
-
-        // Users Management
-        function loadUsers() {
-            const tbody = document.getElementById('usersTableBody');
-            tbody.innerHTML = users.map(user => `
-                <tr>
-                    <td>${user.email}</td>
-                    <td><span style="background: ${getRoleColor(user.role)}; color: white; padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.8rem;">${user.role}</span></td>
-                    <td><span style="color: ${user.status === 'active' ? '#2ed573' : user.status === 'suspended' ? '#ff4757' : '#ffa502'}">${user.status}</span></td>
-                    <td>${user.created}</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-edit" onclick="editUser(${user.id})">Edit</button>
-                            <button class="btn btn-danger" onclick="deleteUser(${user.id})">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-        }
-
-        function getRoleColor(role) {
-            switch(role) {
-                case 'admin': return '#667eea';
-                case 'teacher': return '#2ed573';
-                case 'student': return '#ffa502';
-                default: return '#999';
-            }
-        }
-
-        function openUserModal(user = null) {
+        window.openUserModal = function() {
+            document.getElementById('userForm').reset();
+            document.getElementById('userId').value = '';
+            document.getElementById('userModalTitle').textContent = 'Add New User';
             document.getElementById('userModal').classList.add('active');
-            
-            if (user) {
-                document.getElementById('userModalTitle').textContent = 'Edit User';
-                document.getElementById('userId').value = user.id;
-                document.getElementById('userEmail').value = user.email;
-                document.getElementById('userPassword').value = '';
-                document.getElementById('userRole').value = user.role;
-                document.getElementById('userStatus').value = user.status;
-            } else {
-                document.getElementById('userModalTitle').textContent = 'Add New User';
-                document.getElementById('userForm').reset();
-                document.getElementById('userId').value = '';
-            }
-        }
+        };
 
-        function closeUserModal() {
+        window.closeUserModal = function() {
             document.getElementById('userModal').classList.remove('active');
-        }
+        };
 
-        function saveUser(event) {
-            event.preventDefault();
-            
-            const userId = document.getElementById('userId').value;
-            const userData = {
-                id: userId ? parseInt(userId) : Date.now(),
-                email: document.getElementById('userEmail').value,
-                password: document.getElementById('userPassword').value,
-                role: document.getElementById('userRole').value,
-                status: document.getElementById('userStatus').value,
-                created: userId ? users.find(u => u.id == userId)?.created : new Date().toISOString().split('T')[0]
-            };
+        window.editUser = function(email) {
+            const user = users.find(u => u.email === email);
+            if (!user) return;
+            document.getElementById('userId').value = user.email;
+            document.getElementById('userEmail').value = user.email;
+            document.getElementById('userPassword').value = '';
+            document.getElementById('userRole').value = user.role;
+            document.getElementById('userStatus').value = user.status;
+            document.getElementById('userModalTitle').textContent = 'Edit User';
+            document.getElementById('userModal').classList.add('active');
+        };
 
-            if (supabase && !userId) {
-                // Create user in Supabase
-                createUserInSupabase(userData);
-            } else {
-                // Save to localStorage
-                if (userId) {
-                    const index = users.findIndex(u => u.id == userId);
-                    // Preserve password if editing and not changed
-                    if (!userData.password) {
-                        userData.password = users[index].password;
+        window.deleteUser = async function(email) {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                if (supabase) {
+                    const { error } = await supabase.auth.admin.deleteUser(email);
+                    if (error) {
+                        alert('Error deleting user: ' + error.message);
+                        return;
                     }
-                    users[index] = userData;
-                    showNotification('User updated successfully!');
-                } else {
-                    users.push(userData);
-                    showNotification('User added successfully!');
                 }
+                users = users.filter(u => u.email !== email);
+                renderUsers();
+                updateStats();
+            }
+        };
+
+        document.getElementById('userForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('userEmail').value;
+            const password = document.getElementById('userPassword').value;
+            const role = document.getElementById('userRole').value;
+            const status = document.getElementById('userStatus').value;
+            const existingId = document.getElementById('userId').value;
+
+            if (existingId) {
+                const index = users.findIndex(u => u.email === existingId);
+                if (index !== -1) {
+                    users[index] = { ...users[index], role, status };
+                }
+            } else {
+                if (supabase && password) {
+                    const { data, error } = await supabase.auth.admin.createUser({
+                        email,
+                        password,
+                        user_metadata: { role }
+                    });
+                    if (error) {
+                        alert('Error creating user: ' + error.message);
+                        return;
+                    }
+                }
+                users.push({
+                    email,
+                    role,
+                    status,
+                    created: new Date().toLocaleDateString()
+                });
             }
 
             closeUserModal();
-            loadUsers();
-            saveUsersToStorage();
-        }
+            renderUsers();
+            updateStats();
+        });
 
-        async function createUserInSupabase(userData) {
-            try {
-                const { data, error } = await supabase.auth.admin.createUser({
-                    email: userData.email,
-                    password: userData.password,
-                    user_metadata: {
-                        role: userData.role
-                    }
-                });
-
-                if (error) throw error;
-                
-                users.push({
-                    id: data.user.id,
-                    email: userData.email,
-                    role: userData.role,
-                    status: userData.status,
-                    created: new Date().toISOString().split('T')[0]
-                });
-                
-                saveUsersToStorage();
-                loadUsers();
-                showNotification('User created successfully in Supabase!');
-            } catch (error) {
-                console.error('Error creating user:', error);
-                showNotification('Error creating user: ' + error.message);
+        window.exportDownloads = function() {
+            if (downloads.length === 0) {
+                alert('No downloads to export');
+                return;
             }
+            const csv = 'Student Name,Email,Grade,Date,Game\n' + 
+                downloads.map(dl => 
+                    `"${dl.studentName}","${dl.email}",${dl.grade},${dl.date},"${dl.game || 'Demo Pack'}"`
+                ).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'downloads.csv';
+            a.click();
+        };
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
-        function editUser(id) {
-            const user = users.find(u => u.id === id);
-            openUserModal(user);
-        }
+        window.editGame = editGame;
+        window.deleteGame = deleteGame;
+        window.editUser = editUser;
+        window.deleteUser = deleteUser;
 
-        function deleteUser(id) {
-            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
-                if (supabase) {
-                    // Delete from Supabase
-                    deleteUserFromSupabase(id);
-                } else {
-                    users = users.filter(u => u.id !== id);
-                    loadUsers();
-                    saveUsersToStorage();
-                    showNotification('User deleted successfully!');
-                }
-            }
-        }
-
-        async function deleteUserFromSupabase(userId) {
-            try {
-                const { error } = await supabase.auth.admin.deleteUser(userId);
-                if (error) throw error;
-                
-                users = users.filter(u => u.id !== userId);
-                loadUsers();
-                saveUsersToStorage();
-                showNotification('User deleted successfully!');
-            } catch (error) {
-                console.error('Error deleting user:', error);
-                // Fallback to local deletion
-                users = users.filter(u => u.id !== userId);
-                loadUsers();
-                saveUsersToStorage();
-                showNotification('User deleted locally (Supabase error: ' + error.message + ')');
-            }
-        }
-
-        function saveUsersToStorage() {
-            localStorage.setItem('eduquest_users', JSON.stringify(users));
-        }
-
-        // Notification
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.textContent = message;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-
-        // Initialize
-        checkAuth();
+        updateStats();
     </script>
 </body>
 </html>

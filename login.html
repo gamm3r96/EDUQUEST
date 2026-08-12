@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - EduQuest Games</title>
+    <script src="https://cdn.jsdelivr.net/npm/@iconify/iconify@3/dist/iconify.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -11,120 +12,54 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --error: #ef4444;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: white;
-        }
-
-        .logo-icon {
-            font-size: 2rem;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            transition: opacity 0.3s;
-        }
-
-        .nav-links a:hover {
-            opacity: 0.8;
-        }
-
-        /* Login Section */
-        .login-section {
-            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 100px 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            opacity: 0.5;
+            padding: 2rem;
         }
 
         .login-container {
             background: white;
-            max-width: 450px;
-            width: 100%;
             padding: 3rem;
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 1;
+            width: 100%;
+            max-width: 450px;
         }
 
-        .login-header {
+        .logo {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .login-header h1 {
-            font-size: 2rem;
-            color: #333;
-            margin-bottom: 0.5rem;
+        .logo a {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .login-header p {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        .login-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            display: block;
+        .login-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
         }
 
         .form-group {
@@ -134,14 +69,14 @@
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: #333;
+            font-weight: 500;
+            color: var(--dark);
         }
 
         .form-group input {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
+            padding: 0.9rem;
+            border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-size: 1rem;
             transition: border-color 0.3s;
@@ -149,7 +84,7 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--primary);
         }
 
         .form-options {
@@ -164,115 +99,105 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: #666;
-        }
-
-        .remember-me input[type="checkbox"] {
-            width: auto;
-            cursor: pointer;
+            color: #64748b;
         }
 
         .forgot-password {
-            color: #667eea;
+            color: var(--primary);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .forgot-password:hover {
             text-decoration: underline;
         }
 
-        .login-btn {
+        .submit-btn {
             width: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 15px;
+            padding: 1rem;
             border: none;
             border-radius: 10px;
             font-size: 1.1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
         }
 
-        .login-btn:hover {
+        .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .divider {
             text-align: center;
-            margin: 1.5rem 0;
+            margin: 2rem 0;
+            color: #94a3b8;
             position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #e2e8f0;
         }
 
         .divider::before {
-            content: '';
-            position: absolute;
             left: 0;
-            right: 0;
-            top: 50%;
-            height: 1px;
-            background: #e0e0e0;
         }
 
-        .divider span {
-            background: white;
-            padding: 0 1rem;
-            color: #666;
-            position: relative;
-            font-size: 0.9rem;
+        .divider::after {
+            right: 0;
         }
 
         .social-login {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
+            margin-bottom: 1.5rem;
         }
 
         .social-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
             border-radius: 10px;
             background: white;
             cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            color: #333;
             transition: all 0.3s;
-            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
         }
 
         .social-btn:hover {
-            background: #f8f9fa;
-            border-color: #667eea;
-        }
-
-        .social-btn.google {
-            color: #DB4437;
-        }
-
-        .social-btn.microsoft {
-            color: #00A4EF;
-        }
-
-        .social-btn.clever {
-            color: #FF5D00;
+            border-color: var(--primary);
+            transform: translateY(-2px);
         }
 
         .signup-link {
             text-align: center;
-            margin-top: 1.5rem;
-            color: #666;
+            color: #64748b;
             font-size: 0.95rem;
         }
 
         .signup-link a {
-            color: #667eea;
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
         }
@@ -281,236 +206,185 @@
             text-decoration: underline;
         }
 
-        /* Footer */
-        footer {
-            background: #2d3748;
-            color: white;
-            padding: 2rem 0;
-            text-align: center;
+        .error-message {
+            background: #fef2f2;
+            color: var(--error);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
+        .back-home {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
             color: white;
             text-decoration: none;
-            font-size: 0.9rem;
-            opacity: 0.8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
             transition: opacity 0.3s;
         }
 
-        .footer-links a:hover {
-            opacity: 1;
-        }
-
-        .copyright {
+        .back-home:hover {
             opacity: 0.8;
-            font-size: 0.85rem;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
+        @media (max-width: 480px) {
             .login-container {
                 padding: 2rem;
             }
 
-            .login-header h1 {
-                font-size: 1.5rem;
+            .back-home {
+                position: static;
+                margin-bottom: 1rem;
+                justify-content: center;
             }
 
-            .form-options {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
+            body {
+                padding: 1rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav>
-                <a href="index.html" class="logo">
-                    <span class="logo-icon">🎮</span>
-                    <span>EduQuest Games</span>
-                </a>
-                <ul class="nav-links">
-                    <li><a href="index.html#features">Features</a></li>
-                    <li><a href="index.html#games">Games</a></li>
-                    <li><a href="index.html#testimonials">Reviews</a></li>
-                    <li><a href="index.html#download">Download Demo</a></li>
-                </ul>
-            </nav>
+    <a href="index.html" class="back-home">
+        <span class="iconify" data-icon="icon-park-solid:left"></span>
+        Back to Home
+    </a>
+
+    <div class="login-container">
+        <div class="logo">
+            <a href="index.html">
+                <span class="iconify" data-icon="icon-park-solid:game-console" style="color: var(--accent);"></span>
+                EduQuest Games
+            </a>
         </div>
-    </header>
 
-    <!-- Login Section -->
-    <section class="login-section">
-        <div class="login-container">
-            <div class="login-header">
-                <span class="login-icon">🚀</span>
-                <h1>Welcome Back!</h1>
-                <p>Log in to continue your STEM adventure</p>
-            </div>
+        <h1 class="login-title">Welcome Back!</h1>
 
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="student@example.com" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                </div>
-
-                <div class="form-options">
-                    <label class="remember-me">
-                        <input type="checkbox" name="remember">
-                        Remember me
-                    </label>
-                    <a href="#" class="forgot-password">Forgot Password?</a>
-                </div>
-
-                <button type="submit" class="login-btn">Log In</button>
-            </form>
-
-            <div class="divider">
-                <span>or login with</span>
-            </div>
-
-            <div class="social-login">
-                <a href="#" class="social-btn google">
-                    <span>G</span> Continue with Google
-                </a>
-                <a href="#" class="social-btn microsoft">
-                    <span>M</span> Continue with Microsoft
-                </a>
-                <a href="#" class="social-btn clever">
-                    <span>C</span> Continue with Clever
-                </a>
-            </div>
-
-            <div class="signup-link">
-                Don't have an account? <a href="index.html#download">Download Free Demo</a>
-            </div>
+        <div class="error-message" id="errorMessage">
+            <span class="iconify" data-icon="icon-park-solid:error"></span>
+            <span id="errorText"></span>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-links">
-                    <a href="index.html#features">Features</a>
-                    <a href="index.html#games">Games</a>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
-                    <a href="#">Contact Us</a>
-                </div>
-                <p class="copyright">&copy; 2024 EduQuest Games. All rights reserved. Making STEM learning fun! 🎮</p>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" required placeholder="your@email.com">
             </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required placeholder="Enter your password">
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" id="remember">
+                    Remember me
+                </label>
+                <a href="#" class="forgot-password">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="iconify" data-icon="icon-park-solid:login"></span>
+                Sign In
+            </button>
+        </form>
+
+        <div class="divider">or continue with</div>
+
+        <div class="social-login">
+            <button class="social-btn" title="Google">
+                <span class="iconify" data-icon="icon-park-solid:google"></span>
+            </button>
+            <button class="social-btn" title="Microsoft">
+                <span class="iconify" data-icon="icon-park-solid:microsoft"></span>
+            </button>
+            <button class="social-btn" title="Clever">
+                <span class="iconify" data-icon="icon-park-solid:school"></span>
+            </button>
         </div>
-    </footer>
+
+        <p class="signup-link">
+            Don't have an account? <a href="#">Contact your teacher</a>
+        </p>
+    </div>
 
     <script type="module">
-      import { supabase } from './supabase-config.js';
+        import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-      // Check if user is logged in on page load
-      async function checkAuth() {
-        if (!supabase) {
-          console.warn('Supabase not configured. Using demo mode.');
-          return;
-        }
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          window.currentUser = session.user;
-          updateUIForLoggedInUser(session.user);
-        }
-      }
-
-      // Login form handler
-      document.getElementById('loginForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
+        const supabaseUrl = 'YOUR_SUPABASE_URL';
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY';
         
-        const email = document.getElementById('email').value;
-        const password = document.getElementById('password').value;
-        
-        if (!supabase) {
-          // Demo mode fallback
-          alert('Supabase not configured. Please update supabase-config.js with your credentials.');
-          return;
+        let supabase;
+        if (supabaseUrl !== 'YOUR_SUPABASE_URL' && supabaseKey !== 'YOUR_SUPABASE_ANON_KEY') {
+            supabase = createClient(supabaseUrl, supabaseKey);
         }
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+        const submitBtn = document.getElementById('submitBtn');
+
+        function showError(message) {
+            errorText.textContent = message;
+            errorMessage.style.display = 'flex';
+        }
+
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+
+        async function handleLogin(email, password) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="iconify" data-icon="icon-park-solid:loading"></span> Signing in...';
+            hideError();
+
+            try {
+                if (supabase) {
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password
+                    });
+
+                    if (error) throw error;
+
+                    const userRole = data.user.user_metadata?.role || 'student';
+                    
+                    if (userRole === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                } else {
+                    if (email === 'admin@eduquest.com' && password === 'admin123') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        showError('Demo mode: Use admin@eduquest.com / admin123 or configure Supabase');
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span class="iconify" data-icon="icon-park-solid:login"></span> Sign In';
+                        return;
+                    }
+                }
+            } catch (error) {
+                showError(error.message || 'Invalid email or password');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span class="iconify" data-icon="icon-park-solid:login"></span> Sign In';
+            }
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            handleLogin(email, password);
         });
-
-        if (error) {
-          alert('Login failed: ' + error.message);
-          return;
-        }
-
-        // Store user info
-        window.currentUser = data.user;
-        
-        // Redirect based on role
-        const userRole = data.user.user_metadata?.role || 'student';
-        
-        if (userRole === 'admin') {
-          window.location.href = 'admin.html';
-        } else {
-          window.location.href = 'index.html';
-        }
-      });
-
-      // Logout function (can be called from other pages)
-      window.logout = async function() {
-        if (supabase) {
-          await supabase.auth.signOut();
-        }
-        window.currentUser = null;
-        window.location.href = 'index.html';
-      };
-
-      // Update UI based on login status
-      function updateUIForLoggedInUser(user) {
-        const role = user.user_metadata?.role || 'student';
-        console.log(`Logged in as ${role}: ${user.email}`);
-      }
-
-      // Initialize auth check
-      checkAuth();
-
-      // Add animation on page load
-      document.addEventListener('DOMContentLoaded', function() {
-        const loginContainer = document.querySelector('.login-container');
-        loginContainer.style.opacity = '0';
-        loginContainer.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-          loginContainer.style.transition = 'all 0.5s ease';
-          loginContainer.style.opacity = '1';
-          loginContainer.style.transform = 'translateY(0)';
-        }, 100);
-      });
     </script>
 </body>
 </html>
